@@ -1,0 +1,24 @@
+.text-shadow-drop::after {
+    content: "Fashion";
+    position: absolute;
+    left: 0;
+    top: -55%;
+    font-family: "Montserrat", sans-serif;
+    font-size: 5rem;
+    text-transform: uppercase;
+    opacity: 0.6;
+    background: linear-gradient(to top, var(--color-template-whitesmoke), var(--color-template-primary)) 0% 100% no-repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    z-index: -1;
+}
+
+@media screen and (max-width: 540px) {
+    .text-shadow-drop::after {
+        font-size: 4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        top: -55%;
+    }
+}
