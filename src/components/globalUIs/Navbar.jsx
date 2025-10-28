@@ -50,7 +50,7 @@ const Navbar = () => {
             <AnimatePresence mode="wait">
                 <div className={cn("py-6", isNavColored ? "bg-white" : "")}>
                     <ViewWrapper classname="flex items-center justify-between ">
-                            <div className=" font-bold text-[30px] text-variant-brown font-template-badoni">
+                            <div className=" font-bold text-[30px] text-variant-brown font-template-primary max-md:text-sm">
                                 Smell Nice
                             </div>
                             <div className="hidden md:flex items-center gap-x-8 text-[#999999]">
