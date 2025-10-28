@@ -50,7 +50,7 @@ const Navbar = () => {
             <AnimatePresence mode="wait">
                 <div className={cn("py-6", isNavColored ? "bg-white" : "")}>
                     <ViewWrapper classname="flex items-center justify-between ">
-                            <div className=" font-bold text-[30px] text-variant-brown font-template-primary max-md:text-sm">
+                            <div className=" font-bold text-[30px] text-variant-brown font-template-badoni">
                                 Smell Nice
                             </div>
                             <div className="hidden md:flex items-center gap-x-8 text-[#999999]">
@@ -88,7 +88,7 @@ const Navbar = () => {
                         <div className="flex flex-col gap-y-1">
                             <div className="flex items-center justify-between">
                                 <div className="w-[140px] h-[25px] relative">
-                                    <div className=" font-bold text-[30px] text-variant-brown font-template-badoni">
+                                    <div className=" font-bold text-[30px] text-variant-brown font-template-badoni max-sm:text-[20px]">
                                 Smell Nice
                             </div>
                                 </div>
@@ -98,6 +98,7 @@ const Navbar = () => {
                                 <Link onClick={() => setIsMobileNavOpen(false)} to="/" className="py-2 text-[19px] font-template-clash">Home</Link>
                                 <Link onClick={() => setIsMobileNavOpen(false)} to="/shop" className="py-2 text-[19px] font-template-clash">Shop</Link>
                                 <Link onClick={() => setIsMobileNavOpen(false)} to="/about" className="py-2 text-[19px] font-template-clash">About</Link>
+                                <Link onClick={() => setIsMobileNavOpen(false)} to="/blog" className="py-2 text-[19px] font-template-clash">Blog</Link>
                                 <Link onClick={() => setIsMobileNavOpen(false)} to="#" className="py-2 text-[19px] font-template-clash">Contact</Link>
                             </div>
                             <div className="px-3 flex flex-col">

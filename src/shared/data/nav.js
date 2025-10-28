@@ -26,8 +26,8 @@ export const navlinks = [
     },
     {
         id: 5,
-        _path: "/cart",
-        _name: "cart"
+        _path: "/blog",
+        _name: "Blog"
     }
 ];
 
