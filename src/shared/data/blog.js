@@ -6,7 +6,7 @@ const blogPosts = [
       "How do you create compelling presentations that wow your colleagues and impress your managers?",
     author: "J-Marvelz",
     date: "4 Sep. 2025",
-    image: "/images/curated/image21.jpg",
+    image: "/images/curated/image23.jpg",
     tags: ["Bags", "Shoes", "Sandals"],
     featured: true,
     slug: "gucci-review-presentations",

@@ -23,6 +23,11 @@ export const navlinks = [
         id: 4,
         _path: "/shop",
         _name: "Shop"
+    },
+    {
+        id: 5,
+        _path: "/cart",
+        _name: "cart"
     }
 ];
 
