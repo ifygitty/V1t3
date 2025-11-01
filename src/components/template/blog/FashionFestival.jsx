@@ -10,7 +10,7 @@ const FashionFestival = () => {
         <div className="flex flex-col gap-12">
           {/* Featured Fashion Festival */}
           <div className="w-full">
-            <div className="relative group cursor-pointer flex flex-col md:flex-row gap-8">
+            <div className="relative group cursor-pointer flex flex-col md:flex-row gap-8 md:h-[246px]">
               {/* Image */}
               <div className="relative w-full md:w-1/2 h-[246px] md:h-[246px] overflow-hidden">
                 <img
@@ -21,13 +21,13 @@ const FashionFestival = () => {
               </div>
 
               {/* Content */}
-              <div className="flex-1 space-y-4">
+              <div className="flex flex-col justify-between md:h-[246px] md:w-[643px]">
                 <div className="text-[14px] leading-[20px] font-semibold font-template-inter text-[#6941C6]">
                   {fashionFestival.author} • {fashionFestival.date}
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
-                  <h2 className="text-[28px] md:text-[32px] font-semibold text-[#667085] group-hover:text-template-primary transition-colors">
+                  <h2 className="text-[28px] md:text-[25px] font-semibold text-[#667085] group-hover:text-template-primary transition-colors xl:text-[32px]">
                     {fashionFestival.title}
                   </h2>
                   <TbArrowUpRight
