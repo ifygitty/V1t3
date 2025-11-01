@@ -24,11 +24,7 @@ export const navlinks = [
         _path: "/shop",
         _name: "Shop"
     },
-    {
-        id: 5,
-        _path: "/blog",
-        _name: "Blog"
-    }
+   
 ];
 
 export const navIcons = [
