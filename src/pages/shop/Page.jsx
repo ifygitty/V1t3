@@ -6,6 +6,7 @@ import { bestSellingProducts, products } from "@/shared/data/shop-data";
 import { LISTED_PRODUCT_DISPLAY } from "@/shared/constants";
 import { useMobileView } from "@/hooks/use-mobile-view";
 import { ProductFilteringUIHolder, ShopFilter, ShopTopSelling } from "@/components/template/shop/sections";
+import Banner3 from "@/components/template/home/Banner3";
 
 
 const ShopRoute = () => {
@@ -117,6 +118,9 @@ const ShopRoute = () => {
                     <ShopTopSelling topsellingProducts={topsellingProducts} />
                 </ViewContainer>
             </ViewWrapper>
+            <ViewContainer>
+                <Banner3 />
+            </ViewContainer>
         </div>
     );
 }

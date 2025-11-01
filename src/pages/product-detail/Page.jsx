@@ -15,6 +15,7 @@ import { ShopTopSelling } from "@/components/template/shop/sections";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Link } from "react-router";
 import { useMobileView } from "@/hooks/use-mobile-view";
+import Banner3 from "@/components/template/home/Banner3";
 
 const ProductDetailRoute = () => {
     const {setIsNavColored} = useNavStyleLogic();
@@ -90,8 +91,8 @@ const ProductDetailRoute = () => {
                         <div className="w-full grid grid-cols-1 md:grid-cols-[45%_55%] gap-12">
                             <div className="w-full flex flex-col gap-y-2">
                                 <div className="grid grid-cols-1 min-[520px]:grid-cols-[85%_15%] min-[530px]:grid-cols-[90%_10%] gap-2 min-[530px]:gap-4">
-                                    <div className="w-[435px] h-[450px] min-[520px]:h-[380px] rounded-md bg-template-whitesmoke overflow-hidden group">
-                                        <img className="w-full h-full object-contain object-center aspect-square hover:scale-110 transition-all duration-500 ease-in-out group-hover:scale-110 group-active:scale-110 group-active:duration-250 group-active:touch-manipulation" src={`${detailImages[displayedImage]._path}`} alt={detailImages[displayedImage]._name} />
+                                    <div className="w-[435px] h-[500px]  rounded-md bg-red-500 overflow-hidden group">
+                                        <img className="w-full h-full object-cover  aspect-square hover:scale-110 transition-all duration-500 ease-in-out group-hover:scale-110 group-active:scale-110 group-active:duration-250 group-active:touch-manipulation" src={`${detailImages[displayedImage]._path}`} alt={detailImages[displayedImage]._name} />
                                     </div>
                                     <div className="max-[520px]:hidden h-auto flex flex-col justify-between">
                                         <div className="flex flex-col gap-y-3">
@@ -123,10 +124,10 @@ const ProductDetailRoute = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="w-full min-[540px]:w-[90%] grid grid-cols-5 gap-3">
+                                <div className="w-full min-[540px]:w-[85%] grid grid-cols-5 gap-3 ">
                                     {detailImages?.filter(item => !!item.isVariant)?.map((item, idx) => (
-                                        <div onClick={() => setDisplayedImage(idx)} key={`detail-image-${item.id}`} className={`w-full h-15 rounded-md bg-template-whitesmoke ${idx === displayedImage ? "border-template-primary border-2" : ""}`}>
-                                            <img className="w-full h-full object-contain object-center aspect-square" src={item._path} alt={item._name} />
+                                        <div onClick={() => setDisplayedImage(idx)} key={`detail-image-${item.id}`} className={`w-full h-18 rounded-md bg-template-whitesmoke ${idx === displayedImage ? "border-template-primary border-2" : ""}`}>
+                                            <img className="w-full h-full object-cover rounded-md  aspect-square" src={item._path} alt={item._name} />
                                         </div>
                                     ))}
                                 </div>
@@ -394,6 +395,10 @@ const ProductDetailRoute = () => {
                     <ShopTopSelling topsellingProducts={topsellingProducts} />
                 </ViewContainer>
             </ViewWrapper>
+            <ViewContainer>
+                <Banner3 />
+            </ViewContainer>
+                        
         </div>
     )
 }

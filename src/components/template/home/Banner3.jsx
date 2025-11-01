@@ -7,8 +7,6 @@ const Banner3 = () => {
   return (
     <div>
       <div className="h-[450px] bg-[url('/images/banner/image4.jpg')] bg-cover bg-center pl-20 pt-30 hidden md:block">
-        {/* <img src="/images/banner/image4.jpg" alt="" className='w-full h-full object-cover'/>
-        import React from "react"; */}
             <Banner3form />
             </div>
             <div className="h-[360px] bg-[url('/images/banner/image5.jpg')] bg-cover bg-center   flex  md:hidden">

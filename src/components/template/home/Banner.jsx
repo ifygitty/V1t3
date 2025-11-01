@@ -60,9 +60,9 @@ const Banner = () => {
         </div>
         </ViewWrapper>
         <ViewWrapper classname="bg-variant-brown py-10 font-medium font-template-badoni ">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {services.map(service => (
-            <Service classname="text-[#FFFFFF] max-md:p-4 max-md:bg-[#644040] max-[846px]:text-sm max-sm:p-2" key={service.id} title={service.title} icon={service.icon} subtitle={service.subtitle}/>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-md:gap-x-2">
+            {services.map((service, index) => (
+            <Service classname="text-[#FFFFFF] max-md:p-4 max-md:bg-[#644040] max-[846px]:text-sm max-sm:p-2" key={service.id} title={service.title} index={index} icon={service.icon} subtitle={service.subtitle}/>
             ))}
         </div>
         </ViewWrapper>
