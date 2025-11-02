@@ -12,9 +12,9 @@ const Footer = () => {
                             </div>
                     <div className="flex flex-col gap-y-3 max-md:gap-y-1">
                         <div className="leasing relaxed text-gray-500 font-template-clash ">
-                            <div className="max-md:flex max-md:justify-center text-center">Lorem ipsum consequat neque sed erat id mauris non eu c nunc sed enim egestas landit sit teilus proin</div>
+                            <div className="max-md:flex max-md:justify-center max-md:text-center max-md:mb-3">Lorem ipsum consequat neque sed erat id mauris non eu c nunc sed enim egestas landit sit teilus proin</div>
                         </div>
-                        <div className="flex max-[568px]:justify-center gap-x-4">
+                        <div className="flex max-md:justify-center gap-x-4 max-md:text-center">
                             <div className="w-8 h-8 rounded-full flex bg-white justify-center items-center">
                                 <LuFacebook size={18} />
                             </div>
