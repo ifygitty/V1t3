@@ -91,7 +91,7 @@ const ProductDetailRoute = () => {
                         <div className="w-full grid grid-cols-1 md:grid-cols-[45%_55%] gap-12">
                             <div className="w-full flex flex-col gap-y-2">
                                 <div className="grid grid-cols-1 min-[520px]:grid-cols-[85%_15%] min-[530px]:grid-cols-[90%_10%] gap-2 min-[530px]:gap-4">
-                                    <div className="w-[435px] h-[500px]  rounded-md overflow-hidden group">
+                                    <div className="w-[435px] h-[500px]  rounded-md overflow-hidden group max-sm:w-full">
                                         <img className="w-full h-full object-cover  aspect-square hover:scale-110 transition-all duration-500 ease-in-out group-hover:scale-110 group-active:scale-110 group-active:duration-250 group-active:touch-manipulation" src={`${detailImages[displayedImage]._path}`} alt={detailImages[displayedImage]._name} />
                                     </div>
                                     <div className="max-[520px]:hidden h-auto flex flex-col justify-between">
