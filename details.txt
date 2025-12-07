@@ -1,0 +1,407 @@
+4) Details & gotchas (important)
+
+Environment variables precedence: the SDK checks many possible names — pick one consistent name for your environment (Vite uses VITE_... prefix).
+
+Browser vs server: In server environments (Node SSR), localStorage is not available; the SDK falls back to env vars. In the browser, localStorage override applies.
+
+Token precedence: SALESIVE_ACCESS_TOKEN in localStorage will be used over API key — great for logged-in users. If you want to test with API Key, clear localStorage.
+
+Ghost sessions live on: ghost tokens allow pre-auth cart creation; when you convert to user (verify OTP), the SDK upgrades the session (preserves cart) — that’s the intended flow.
+
+Axios errors: when catching errors, inspect error.response?.data and error.response?.status.
+
+TypeScript types: the package ships .d.ts, but sometimes API payloads have optional fields; handle undefined safely.
+
+Security: don’t expose secret server-side keys in the browser. Use server-side endpoints (or restrict key usage) if needed.
+
+
+
+
+5) How to test locally (manual checklist)
+
+Start the app: pnpm dev.
+
+Make sure .env.local contains VITE_SALESIVE_SHOP_ID and VITE_SALESIVE_API_KEY (or set shop id via localStorage.SALESIVE_SHOP_ID in the browser console).
+
+Open the demo component. Click Create Ghost Shopper → confirm localStorage.SALESIVE_ACCESS_TOKEN and SALESIVE_AUTH_MODE.
+
+Add product to cart, then view cart snapshot.
+
+Trigger auth.authenticate({email}) → check that server sends OTP (in production this would go to email; for test environments Salesive might return OTP in dev logs).
+
+Call auth.verify({email, otp}) → confirm SALESIVE_AUTH_MODE changed to "USER".
+
+Create order orders.createFromCart() and apply coupon.
+
+
+
+
+6) Advanced: optimistic updates & caching tips
+
+For addToCart you can optimistically update the ["cart"] query by using onMutate in useMutation to update local cache before the network call completes, then rollback on error.
+
+Use keepPreviousData on product lists for smooth pagination.
+
+Use staleTime if cart data can be considered fresh for a short period.
+
+Example optimistic update skeleton:
+useMutation(mutFn, {
+  onMutate: async (newItem) => {
+    await queryClient.cancelQueries(["cart"]);
+    const previous = queryClient.getQueryData(["cart"]);
+    queryClient.setQueryData(["cart"], (old: any) => {
+      // return new cart object merged with newItem
+    });
+    return { previous };
+  },
+  onError: (err, newItem, context) => {
+    queryClient.setQueryData(["cart"], context.previous);
+  },
+  onSettled: () => {
+    queryClient.invalidateQueries(["cart"]);
+  },
+});
+
+
+
+
+
+
+Good question — and the nice part is: you don’t manually pass those IDs into every hook.
+Salesive is already reading them from localStorage automatically. You just need to make sure they are set once when your app loads.
+
+I’ll show you exactly how to use your shop-id and bucket-token in your React app and connect it to the hooks I sent you earlier.
+
+✅ Step 1 – Make sure IDs exist in localStorage when app loads
+
+Create a file:
+
+src/config/salesiveConfig.js
+
+
+Put this inside:
+
+// src/config/salesiveConfig.js
+
+export function initSalesive() {
+  const SHOP_ID = "6929b7e67e52b0a42ca8c039";
+  const BUCKET_TOKEN = "sf_miizijju24f16";
+
+  // set if not already in browser
+  if (!localStorage.getItem("shop-id")) {
+    localStorage.setItem("shop-id", SHOP_ID);
+  }
+
+  if (!localStorage.getItem("bucket-token")) {
+    localStorage.setItem("bucket-token", BUCKET_TOKEN);
+  }
+
+  console.log("Salesive initialized:", {
+    shopId: localStorage.getItem("shop-id"),
+    bucketToken: localStorage.getItem("bucket-token"),
+  });
+}
+
+
+This binds your shop to your frontend.
+
+✅ Step 2 – Call it in your main.jsx or App.jsx
+
+Open:
+
+src/main.jsx
+
+
+Add this:
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { initSalesive } from "./config/salesiveConfig";
+
+initSalesive();  // 👈 VERY IMPORTANT
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+From now on:
+✅ Salesive always knows the shop
+✅ Your hooks start working
+✅ Cart, products, orders all connect to Innomex & Sons
+
+✅ Step 3 – How your hooks use the ID (behind the scenes)
+
+This part is invisible to you:
+
+cart.get()
+products.list()
+orders.createFromCart()
+
+
+Salesive internally does:
+
+const shopId = localStorage.getItem("shop-id");
+
+axios.get(`/cart?shop=${shopId}`);
+
+
+So this is why you DO NOT see shopId in your hooks anymore.
+
+✅ Already wired
+✅ Already automatic
+✅ Already secure
+
+✅ Step 4 – Using bucket-token (for image uploads)
+
+When you use Salesive upload feature:
+
+import { files } from "salesive-api-axios";
+
+files.upload(file);
+
+
+It will automatically use:
+
+localStorage.bucket-token
+
+
+So that means:
+
+Your logo upload ✅
+
+Product image upload ✅
+
+Avatar upload ✅
+
+Nothing else required.
+
+✅ Step 5 – Example: Product page using your Store
+
+Your final working product page will look like:
+
+import { useProductsList } from "./hooks/salesiveHooks";
+import { useAddToCart } from "./hooks/salesiveHooks";
+
+export default function Products() {
+  const { data, isLoading } = useProductsList();
+  const addToCart = useAddToCart();
+
+  if (isLoading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      <h2>Products from Innomex & Sons</h2>
+
+      {data?.data?.map((product) => (
+        <div key={product._id}>
+          <h4>{product.name}</h4>
+          <p>{product.price}</p>
+
+          <button onClick={() => addToCart.mutate({ productId: product._id })}>
+            Add to cart
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+No shop id = passed
+No token = passed
+
+But it still works because of:
+
+localStorage.shop-id ✔
+localStorage.bucket-token ✔
+
+✅ Now, answering your staleTime question properly
+
+You asked earlier:
+
+Does it refresh/recall after 10 seconds?
+
+Answer: NOT automatically.
+
+Here is the real behavior:
+
+For 10 seconds:
+✅ Data is fresh
+✅ No request will be sent again
+
+After 10 seconds:
+⚠️ Data is marked stale
+BUT it only refetches when:
+
+You click back to the page
+
+You refocus the tab
+
+You refresh
+
+You trigger a mutation
+
+It does NOT auto-poll every 10 seconds.
+
+If you want auto refresh, you must add:
+
+refetchInterval: 10000
+
+
+Example:
+
+useQuery(["cart"], () => cart.get().then(r => r.data), {
+  staleTime: 1000 * 10,
+  refetchInterval: 1000 * 10 // now it will auto refetch
+});
+
+✅ Summary: What you MUST do to connect shop to code
+
+Create salesiveConfig.js
+
+Add your IDs
+
+Call initSalesive() in main.jsx
+
+Use normal hooks like useCart()
+
+Done ✅
+
+If you want next, I can:
+
+✅ Create a ready-made folder structure for you
+✅ Give you a full Products + Cart + Checkout UI
+✅ Attach it to your Bitcoin card platform
+
+Just say: "Build Salesive store pages for Innomex & Sons"
+
+
+
+
+export function useVerifyOtp() {
+  const queryClient = useQueryClient();
+
+  return useMutation((payload) => auth.verify(payload), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cart"]);
+      queryClient.invalidateQueries(["orders"]);
+      queryClient.invalidateQueries(["shipping-options"]);
+    },
+  });
+}
+
+/**
+ * Cart: fetch cart snapshot
+ */
+export function useCart() {
+  return useQuery(["cart"], () => cart.get().then((r) => r.data), {
+    staleTime: 1000 * 10,
+  });
+}
+
+/**
+ * Cart: add item
+ */
+export function useAddToCart() {
+  const qc = useQueryClient();
+
+  return useMutation((payload) => cart.addItem(payload), {
+    onSuccess: () => qc.invalidateQueries(["cart"]),
+  });
+}
+
+/**
+ * Orders: create from cart
+ */
+export function useCreateOrderFromCart() {
+  return useMutation(() => orders.createFromCart());
+}
+
+/**
+ * Coupon apply
+ */
+export function useApplyCoupon() {
+  const qc = useQueryClient();
+
+  return useMutation((payload) => coupon.apply(payload), {
+    onSuccess: () => {
+      qc.invalidateQueries(["orders"]);
+      qc.invalidateQueries(["cart"]);
+    },
+  });
+}
+
+/**
+ * Products list
+ */
+export function useProductsList(params) {
+  return useQuery(["products", params], () => products.list(params).then((r) => r.data), {
+    keepPreviousData: true,
+  });
+}
+
+/**
+ * Wishlist
+ */
+export function useWishlist() {
+  return useQuery(["wishlist"], () => wishlist.get().then((r) => r.data));
+}
+
+export function useAddWishlistItem() {
+  const qc = useQueryClient();
+
+  return useMutation((payload) => wishlist.addItem(payload), {
+    onSuccess: () => qc.invalidateQueries(["wishlist"]),
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function ProductsPage() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => products.list({ limit: 20 }),
+  });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading products</p>;
+
+  return (
+    <div>
+      <h1>Products</h1>
+
+      {data?.data?.products.map(product => (
+        <div key={product.id}>
+          <h3>{product.name}</h3>
+          <p>{product.price}</p>
+
+          <Link to={`/product/${product.slug}`}>
+            View
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default ProductsPage;
+
+
+

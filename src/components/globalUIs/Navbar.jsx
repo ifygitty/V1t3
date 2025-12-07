@@ -14,11 +14,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LiaTimesSolid } from "react-icons/lia";
 import { HiOutlineChevronDown } from "react-icons/hi2";
 import Text from "../template/ui/Text";
+import { useSalesiveConfig } from "salesive-dev-tools";
 
 const Navbar = () => {
     const navs = useDeferredValue(navlinks);
     const {isNavColored} = useNavStyleLogic();
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+    const storeName = useSalesiveConfig("app-name");
 
     const mobileMenuContainer = useRef(null);
 
@@ -51,7 +53,7 @@ const Navbar = () => {
                 <div className={cn("py-6", isNavColored ? "bg-white" : "")}>
                     <ViewWrapper classname="flex items-center justify-between ">
                             <div className=" font-bold text-[30px] text-variant-brown font-template-badoni">
-                                Smell Nice
+                               {storeName}
                             </div>
                             <div className="hidden md:flex items-center gap-x-8 text-[#999999]">
                                 {navs.map((navlink) => (
@@ -89,7 +91,7 @@ const Navbar = () => {
                             <div className="flex items-center justify-between">
                                 <div className="w-[140px] h-[25px] relative">
                                     <div className=" font-bold text-[30px] text-variant-brown font-template-badoni max-sm:text-[20px]">
-                                Smell Nice
+                                {storeName}
                             </div>
                                 </div>
                                 <LiaTimesSolid onClick={() => setIsMobileNavOpen(false)} size={30} className="md:hidden" />

@@ -3,13 +3,14 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { salesiveConfigPlugin } from "salesive-dev-tools";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), salesiveConfigPlugin()],
   resolve: {
     alias: {
       "@": path.join(__dirname, "./src"),

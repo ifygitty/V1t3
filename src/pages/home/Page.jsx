@@ -20,9 +20,12 @@ import 'swiper/css/scrollbar';
 import { TemplateCollectionButton } from "@/components/template/ui/Button";
 import HeroSection from "@/components/template/home/Hero";
 import Banner3 from "@/components/template/home/Banner3";
+// import { useGetListProducts } from "@/query/queryProducts";
 
 const HomeRoute = () => {
     const [productsList, setProductsList] = useState([]);
+    // const { data, isLoading, isError, error } = useGetListProducts();
+    // console.log(data)
 
     useEffect(() => {
         setProductsList(curatedproducts);
